@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+        <div class="container">
+                <h1>TodoApp</h1>
+                <form method="post">
+                    {% csrf_token %}
+                        <div class="form-group">
+                            <div class="form-group" id="description" class="taskName" placeholder="What do you need to do?"
+                                   name="description" required>
+                                 <label for="description">Description</label>
+                                {{ todos.title }}
+                            </div>
+                        <option class="disabled" value="">Choose a category</option>
+                            {{ todos.category }}
+                        </div>
+                    <div class="row">
+                        <button class="btn btn-primary" name="taskAdd" type="submit"><i class="fa fa-plus icon"></i>
+                            Add task</button>&nbsp;
+                        <button class="btn btn-primary" name="taskDelete" type="submit"
+                                onclick="$('input#sublist').click();"><i class="fa fa-trash-o icon"></i>Delete Tasks
+                        </button>
+                    </div>
+                    {% for t in to %}
+                        {{ t.title }}
+                        {{ t.category }}
+                        {{ t.created_at }}<br>
+                    {% endfor %}
+
+                </form>
+            </div>
+{% endblock %}
+
+
+
+
+{#                        {% block list %}#}
+{#                            <ul class="taskList">#}
+{#                            <li class="taskItem">#}
+{#                                <input type="checkbox" class="taskCheckbox" name="checkedbox" id="{{ todo.id }}"#}
+{#                                       value="{{ todo.id }}">#}
+{#                                <label for="{{ todo.id }}"><span class="complete-">{{ todo.title }}</span></label>#}
+{#                                <span class="category-{{ todo.category }}">{{ todo.category }}</span>#}
+{#                                <strong class="taskDate">#}
+{#                                    <i class="fa fa-calendar"></i>{{ todo.created_at }}#}
+{#                                </strong>#}
+{#                            </li>#}
+{#                            </ul>#}
+{#                        {% endblock %}#}
+
+
