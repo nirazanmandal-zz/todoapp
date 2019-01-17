@@ -5,30 +5,19 @@ from .forms import CategoryForm, TodoForm
 
 
 def index(request):
-    todos = TodoForm(request.POST or None)
-    to = TodoList.objects.all()
+    form = TodoForm(request.POST or None)
     categories = Category.objects.all()
     if request.method == 'POST':
         if "taskAdd" in request.POST:
             try:
-                todos = TodoForm(request.POST or None)
-                # title = request.POST["description"]
-                # category = request.POST["category_select"]
-                # content = title + " -- " + " -- " + category
-                # Todo = TodoList(title=title, content=content, category=Category.objects.get(name=category))
-                todos.save()
+                form = TodoForm(request.POST or None)
+                form.save()
                 return redirect("todo:index")
             except Category.DoesNotExist:
                 messages.error(request, "Please fill all")
                 return redirect("todo:index")
 
-        if "taskDelete" in request.POST:
-            checkedlist = request.POST["checkedbox"]
-            for todo_id in checkedlist:
-                todo = TodoList.objects.get(id=int(todo_id))
-                todo.delete()
-
-    return render(request, "todo/index.html", {"todos": todos, 'categories': categories, 'to': to})
+    return render(request, 'todo/index.html', {'form': form, 'categories': categories})
 
 
 def create(request):
@@ -39,6 +28,43 @@ def create(request):
             return redirect('todo:index')
 
     return render(request, 'todo/create.html', {'form': form})
+
+
+def edit(request, pk):
+    context = {}
+    try:
+        data = TodoList.objects.get(id=pk)
+    except TodoList.DoesNotExist:
+        messages.error(request, 'Task not found')
+        return redirect('todo:list')
+
+    form = TodoForm(instance=data)
+    if request.method == 'POST':
+        form = TodoForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return redirect('todo:list')
+
+    context['form'] = form
+    return render(request, 'todo/create.html', context)
+
+
+def list(request):
+    context = {}
+    data = TodoList.objects.all()
+    context['data'] = data
+    return render(request, 'todo/list.html', context)
+
+
+def delete(request, pk):
+    try:
+        data = TodoList.objects.get(id=pk)
+    except TodoList.DoesNotExist:
+        messages.error(request, 'Task not found')
+        return redirect('todo:list')
+    data.delete()
+    messages.success(request, 'Deleted Successfully')
+    return redirect('todo:list')
 
 
 

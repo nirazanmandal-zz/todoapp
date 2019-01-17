@@ -7,10 +7,10 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="name">{{ form.name.label }}</label>
+                    <label for="name">Category</label><br>
                     {{ form.name }}
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Create</button>
             </form>
         </div>
     </div>

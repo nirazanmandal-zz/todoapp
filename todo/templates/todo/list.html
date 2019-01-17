@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load staticfiles %}
 
-</body>
-</html>
+{% block content %}
+    <div class="container">
+        <div class="mt-2">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Description</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Date & Time</th>
+                </tr>
+                {% for li in data %}
+                    <tr>
+                        <td>{{ li.title }}</td>
+                        <td>{{ li.category }}</td>
+                        <td>{{ li.created_at }}</td>
+                        <td>
+                            <a href="{% url 'todo:edit' %}" class="btn btn-primary">Edit</a>
+                            <a href="{% url 'todo:delete' %}" class="btn btn-primary">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </thead>
+            </table>
+         </div>
+     </div>
+{% endblock %}
